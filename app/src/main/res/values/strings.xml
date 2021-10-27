@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Photo Weather</string>
+    <string name="permission_not_granted">Permissions not granted, please approve to open camera</string>
 </resources>
