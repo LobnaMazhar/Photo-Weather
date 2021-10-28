@@ -1,6 +1,8 @@
 package lobna.robusta.photoWeather.viewmodel
 
 import android.app.Application
+import android.graphics.Bitmap
+import android.view.View
 import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.AndroidViewModel
@@ -13,6 +15,8 @@ import lobna.robusta.photoWeather.interfaces.GetLocationInterface
 import lobna.robusta.photoWeather.model.OpenWeatherResponse
 import lobna.robusta.photoWeather.model.WeatherInfoResponse
 import lobna.robusta.photoWeather.repository.MainRepository
+import lobna.robusta.photoWeather.utils.IntentHelper.shareToFacebook
+import lobna.robusta.photoWeather.utils.IntentHelper.shareToTwitter
 import lobna.robusta.photoWeather.utils.LocationHelper
 import lobna.robusta.photoWeather.utils.SingleLiveEvent
 import kotlin.math.roundToInt
@@ -26,8 +30,11 @@ import kotlin.math.roundToInt
 class WeatherInfoViewModel(application: Application) : AndroidViewModel(application) {
 
     val isLoadingObservable = ObservableBoolean(true)
+    val showShareOptionsObservable = ObservableBoolean(false)
 
     val updateImageText = SingleLiveEvent<String>()
+
+    private lateinit var bitmap: Bitmap
 
     private val locationInterface = object : GetLocationInterface {
         override fun setLocation(latLng: LatLng?) {
@@ -77,5 +84,18 @@ class WeatherInfoViewModel(application: Application) : AndroidViewModel(applicat
             "$name, ${sys.country} ${main.temp.roundToInt()}°C, ${main.pressure}hPa, ${main.humidity}%"
         }
         updateImageText.postValue(text)
+    }
+
+    fun setPhotoBitmap(bitmap: Bitmap) {
+        this.bitmap = bitmap
+        showShareOptionsObservable.set(true)
+    }
+
+    fun shareToFacebook(view: View) {
+        view.context.shareToFacebook(bitmap)
+    }
+
+    fun shareToTwitter(view: View) {
+        view.context.shareToTwitter(bitmap)
     }
 }

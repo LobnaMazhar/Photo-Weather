@@ -27,7 +27,7 @@ class CameraHelper(val captureImageInterface: CaptureImageInterface) {
     companion object {
         val cameraPermissions = listOf(Manifest.permission.CAMERA)
 
-        val CAMERA_PERMISSION_CODE = 101
+        const val CAMERA_PERMISSION_CODE = 101
     }
 
     private val cameraExecutor = Executors.newSingleThreadExecutor()

@@ -67,6 +67,7 @@ class WeatherInfoFragment : Fragment() {
         fragmentWeatherInfoBinding.weatherImageView.apply {
             setImageBitmap(bitmap)
         }
+        weatherInfoViewModel.setPhotoBitmap(bitmap)
     }
 
     /**
