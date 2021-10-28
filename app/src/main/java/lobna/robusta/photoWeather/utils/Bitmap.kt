@@ -11,7 +11,7 @@ import android.graphics.*
  * */
 fun Bitmap.drawText(
     text: String,
-    textSize: Float = 40f,
+    textSize: Float = 55f,
     color: Int = Color.BLACK
 ): Bitmap {
     val bitmap = copy(config, true)
