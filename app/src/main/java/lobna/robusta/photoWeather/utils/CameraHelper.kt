@@ -1,10 +1,13 @@
 package lobna.robusta.photoWeather.utils
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -21,10 +24,63 @@ class CameraHelper(val captureImageInterface: CaptureImageInterface) {
 
     private val TAG = CameraHelper::class.simpleName
 
+    companion object {
+        val cameraPermissions = listOf(Manifest.permission.CAMERA)
+
+        val CAMERA_PERMISSION_CODE = 101
+    }
+
     private val cameraExecutor = Executors.newSingleThreadExecutor()
 
-    companion object {
-        val CAMERA_PERMISSION_CODE = 101
+    /**
+     * setting up camera method
+     *
+     * @param activity running activity requesting camera access
+     * @param lifecycleOwner lifecycle of the calling class
+     * @param cameraView previewview view of the camera
+     * */
+    fun initCamera(activity: Activity, lifecycleOwner: LifecycleOwner, cameraView: PreviewView) {
+        val alertText: String
+        when {
+            ifPermissionsGranted(activity) -> setupCamera(activity, lifecycleOwner, cameraView)
+            shouldShowRationale(activity).run {
+                alertText = this; isNotBlank()
+            } -> Toast.makeText(activity, alertText, Toast.LENGTH_SHORT).show()
+            else -> requestPermissions(activity)
+        }
+    }
+
+    /**
+     * Check if camera permissions are granted
+     *
+     * @param context running context required to check for permissions
+     * */
+    private fun ifPermissionsGranted(context: Context): Boolean {
+        return PermissionUtil().ifPermissionsGranted(
+            context, cameraPermissions
+        )
+    }
+
+    /**
+     * Check if camera permissions were denied before and should show an alert to the user
+     *
+     * @param activity running activity required to check for permissions
+     * */
+    private fun shouldShowRationale(activity: Activity): String {
+        return PermissionUtil().shouldShowRationale(
+            activity, cameraPermissions
+        )
+    }
+
+    /**
+     * Request Camera Permissions
+     *
+     * @param activity Activity requesting camera access
+     * */
+    private fun requestPermissions(activity: Activity) {
+        PermissionUtil().requestPermissions(
+            activity, cameraPermissions, CAMERA_PERMISSION_CODE
+        )
     }
 
     /**
@@ -34,7 +90,11 @@ class CameraHelper(val captureImageInterface: CaptureImageInterface) {
      * @param lifecycleOwner lifecycle of the calling class
      * @param cameraView previewview view of the camera
      * */
-    fun setupCamera(context: Context, lifecycleOwner: LifecycleOwner, cameraView: PreviewView) {
+    private fun setupCamera(
+        context: Context,
+        lifecycleOwner: LifecycleOwner,
+        cameraView: PreviewView
+    ) {
         val processCameraProvider = ProcessCameraProvider.getInstance(context)
         processCameraProvider.addListener({
             val cameraProvider = processCameraProvider.get()

@@ -1,15 +1,14 @@
 package lobna.robusta.photoWeather.ui
 
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import lobna.robusta.photoWeather.R
 import lobna.robusta.photoWeather.utils.CameraHelper
-import lobna.robusta.photoWeather.utils.PermissionUtil
+import lobna.robusta.photoWeather.utils.LocationHelper
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,16 +37,13 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             CameraHelper.CAMERA_PERMISSION_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    navHostFragment?.childFragmentManager?.fragments?.get(0)?.apply {
-                        if (this is CapturingFragment) startCamera()
-                    }
-                } else {
-                    Toast.makeText(
-                        this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT
-                    ).show()
-
-                    PermissionUtil.requestPermissions(this)
+                navHostFragment?.childFragmentManager?.fragments?.get(0)?.apply {
+                    if (this is CapturingFragment) startCamera()
+                }
+            }
+            LocationHelper.LOCATION_PERMISSION_CODE -> {
+                navHostFragment?.childFragmentManager?.fragments?.get(0)?.apply {
+                    if (this is WeatherInfoFragment) startLocation()
                 }
             }
         }

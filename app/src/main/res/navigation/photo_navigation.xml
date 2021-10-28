@@ -9,6 +9,23 @@
         android:id="@+id/capturingFragment"
         android:name="lobna.robusta.photoWeather.ui.CapturingFragment"
         android:label="fragment_capturing"
-        tools:layout="@layout/fragment_capturing" />
+        tools:layout="@layout/fragment_capturing">
+        <action
+            android:id="@+id/capturingToInfo"
+            app:destination="@id/weatherInfoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/weatherInfoFragment"
+        android:name="lobna.robusta.photoWeather.ui.WeatherInfoFragment"
+        android:label="fragment_weather_info"
+        tools:layout="@layout/fragment_weather_info">
+        <argument
+            android:name="weather_image"
+            app:argType="android.graphics.Bitmap" />
+        <argument
+            android:name="rotation_degrees"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>
