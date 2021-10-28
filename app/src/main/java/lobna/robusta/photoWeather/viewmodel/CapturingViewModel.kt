@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import lobna.robusta.photoWeather.interfaces.CaptureImageInterface
 import lobna.robusta.photoWeather.utils.CameraHelper
+import lobna.robusta.photoWeather.utils.SingleLiveEvent
 
 /**
  * Subclass of ViewModel responsible for the logic of capturing fragment
@@ -24,7 +25,7 @@ class CapturingViewModel : ViewModel() {
 
     val cameraHelper = CameraHelper(captureImageInterface)
 
-    val capturedImage = MutableLiveData<Pair<Bitmap, Int>>()
+    val capturedImage = SingleLiveEvent<Pair<Bitmap, Int>>()
 
     /**
      * method to ask [cameraHelper] to capture an image

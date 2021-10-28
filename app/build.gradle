@@ -5,6 +5,10 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 }
 
+def localPropertiesFile = rootProject.file("local.properties")
+def gradleProperties = new Properties()
+gradleProperties.load(new FileInputStream(localPropertiesFile))
+
 android {
     compileSdkVersion 31
     buildToolsVersion "31.0.0"
@@ -17,6 +21,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "OPEN_WEATHER_API_KEY", gradleProperties['OPEN_WEATHER_API_KEY'])
     }
 
     buildTypes {
@@ -36,10 +42,6 @@ android {
         viewBinding = true
         dataBinding = true
     }
-}
-
-ext {
-    camerax_version = "1.0.2"
 }
 
 dependencies {
@@ -68,4 +70,16 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.7'
 }

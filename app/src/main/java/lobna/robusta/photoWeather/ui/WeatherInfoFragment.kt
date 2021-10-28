@@ -36,6 +36,7 @@ class WeatherInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         fragmentWeatherInfoBinding = FragmentWeatherInfoBinding.inflate(inflater)
+        fragmentWeatherInfoBinding.wivm = weatherInfoViewModel
         return fragmentWeatherInfoBinding.root
     }
 

@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.WeatherInfoFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/weather_image_view"
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="wivm"
+            type="lobna.robusta.photoWeather.viewmodel.WeatherInfoViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="match_parent"
+        tools:context=".ui.WeatherInfoFragment">
+
+        <ImageView
+            android:id="@+id/weather_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{wivm.isLoadingObservable() ? View.VISIBLE : View.GONE}" />
+    </FrameLayout>
+</layout>
