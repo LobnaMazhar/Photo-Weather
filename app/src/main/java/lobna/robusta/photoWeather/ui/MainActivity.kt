@@ -1,7 +1,9 @@
 package lobna.robusta.photoWeather.ui
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -42,6 +44,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             LocationHelper.LOCATION_PERMISSION_CODE -> {
+                navHostFragment?.childFragmentManager?.fragments?.get(0)?.apply {
+                    if (this is WeatherInfoFragment) startLocation()
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            LocationHelper.REQUEST_CHECK_SETTINGS -> {
+                if (resultCode != RESULT_OK)
+                    Toast.makeText(this, getString(R.string.enable_location), Toast.LENGTH_SHORT)
+                        .show()
+
                 navHostFragment?.childFragmentManager?.fragments?.get(0)?.apply {
                     if (this is WeatherInfoFragment) startLocation()
                 }
