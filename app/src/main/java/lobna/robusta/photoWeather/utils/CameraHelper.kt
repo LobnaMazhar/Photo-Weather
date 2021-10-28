@@ -153,7 +153,9 @@ class CameraHelper(val captureImageInterface: CaptureImageInterface) {
                     val bitmap = imageProxyToBitmap(imageProxy)
                     val rotationDegrees = imageProxy.imageInfo.rotationDegrees
                     imageProxy.close()
-                    bitmap?.let { captureImageInterface.imageCaptured(it, rotationDegrees) }
+                    bitmap?.run {
+                        captureImageInterface.imageCaptured(rotateBitmap(rotationDegrees * 1f))
+                    }
                 }
 
                 override fun onError(exception: ImageCaptureException) {

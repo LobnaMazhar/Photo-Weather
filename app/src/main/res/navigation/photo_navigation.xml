@@ -23,9 +23,6 @@
         <argument
             android:name="weather_image"
             app:argType="android.graphics.Bitmap" />
-        <argument
-            android:name="rotation_degrees"
-            app:argType="integer" />
     </fragment>
 
 </navigation>

@@ -18,14 +18,14 @@ import lobna.robusta.photoWeather.utils.SingleLiveEvent
 class CapturingViewModel : ViewModel() {
 
     private val captureImageInterface = object : CaptureImageInterface {
-        override fun imageCaptured(bitmap: Bitmap, rotationDegrees: Int) {
-            capturedImage.postValue(Pair(bitmap, rotationDegrees))
+        override fun imageCaptured(bitmap: Bitmap) {
+            capturedImage.postValue(bitmap)
         }
     }
 
     val cameraHelper = CameraHelper(captureImageInterface)
 
-    val capturedImage = SingleLiveEvent<Pair<Bitmap, Int>>()
+    val capturedImage = SingleLiveEvent<Bitmap>()
 
     /**
      * method to ask [cameraHelper] to capture an image

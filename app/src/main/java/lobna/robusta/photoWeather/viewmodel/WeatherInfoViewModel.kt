@@ -14,6 +14,8 @@ import lobna.robusta.photoWeather.model.OpenWeatherResponse
 import lobna.robusta.photoWeather.model.WeatherInfoResponse
 import lobna.robusta.photoWeather.repository.MainRepository
 import lobna.robusta.photoWeather.utils.LocationHelper
+import lobna.robusta.photoWeather.utils.SingleLiveEvent
+import kotlin.math.roundToInt
 
 /**
  * Subclass of [AndroidViewModel] responsible for the logic of get weather info and adding it to the image
@@ -24,6 +26,8 @@ import lobna.robusta.photoWeather.utils.LocationHelper
 class WeatherInfoViewModel(application: Application) : AndroidViewModel(application) {
 
     val isLoadingObservable = ObservableBoolean(true)
+
+    val updateImageText = SingleLiveEvent<String>()
 
     private val locationInterface = object : GetLocationInterface {
         override fun setLocation(latLng: LatLng?) {
@@ -62,9 +66,16 @@ class WeatherInfoViewModel(application: Application) : AndroidViewModel(applicat
                 Toast.makeText(getApplication(), response.message, Toast.LENGTH_LONG).show()
             is OpenWeatherResponse.DataResponse<*> -> {
                 (response.data as? WeatherInfoResponse)?.run {
-                    // TODO add data to image
+                    addInfoToImage(response.data)
                 }
             }
         }
+    }
+
+    private fun addInfoToImage(weatherInfoResponse: WeatherInfoResponse) {
+        val text = weatherInfoResponse.run {
+            "$name, ${sys.country} ${main.temp.roundToInt()}°C, ${main.pressure}hPa, ${main.humidity}%"
+        }
+        updateImageText.postValue(text)
     }
 }

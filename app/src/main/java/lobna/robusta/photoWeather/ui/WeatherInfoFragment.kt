@@ -1,5 +1,6 @@
 package lobna.robusta.photoWeather.ui
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,18 +11,18 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.LocationServices
 import lobna.robusta.photoWeather.databinding.FragmentWeatherInfoBinding
 import lobna.robusta.photoWeather.utils.LocationHelper
+import lobna.robusta.photoWeather.utils.drawText
 import lobna.robusta.photoWeather.viewmodel.WeatherInfoViewModel
 
 /**
  * A simple [Fragment] subclass.
  * Used to detect current weather info based on current location and add it to the taken photo
  *
- * @property args Navigation arguments sent from source navigating here,
- * has bitmap and rotation degrees of the taken photo
+ * @property args Navigation arguments sent from source navigating here, has bitmap of the taken photo
  */
 class WeatherInfoFragment : Fragment() {
 
-    lateinit var fragmentWeatherInfoBinding: FragmentWeatherInfoBinding
+    private lateinit var fragmentWeatherInfoBinding: FragmentWeatherInfoBinding
 
     private val args: WeatherInfoFragmentArgs by navArgs()
 
@@ -31,12 +32,19 @@ class WeatherInfoFragment : Fragment() {
         LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
+    private lateinit var bitmap: Bitmap
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         fragmentWeatherInfoBinding = FragmentWeatherInfoBinding.inflate(inflater)
         fragmentWeatherInfoBinding.wivm = weatherInfoViewModel
+        weatherInfoViewModel.updateImageText.observe(this, {
+            if (::bitmap.isInitialized) {
+                updateWeatherImage(bitmap.drawText(it))
+            }
+        })
         return fragmentWeatherInfoBinding.root
     }
 
@@ -46,12 +54,19 @@ class WeatherInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (::fragmentWeatherInfoBinding.isInitialized)
-            fragmentWeatherInfoBinding.weatherImageView.apply {
-                setImageBitmap(args.weatherImage)
-                rotation = args.rotationDegrees * 1f
-            }
+            updateWeatherImage(args.weatherImage)
 
         startLocation()
+    }
+
+    /**
+     * Changes weather image view bitmap
+     * */
+    private fun updateWeatherImage(bitmap: Bitmap) {
+        this.bitmap = bitmap
+        fragmentWeatherInfoBinding.weatherImageView.apply {
+            setImageBitmap(bitmap)
+        }
     }
 
     /**

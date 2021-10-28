@@ -36,7 +36,7 @@ class CapturingFragment : Fragment() {
 
         capturingViewModel.capturedImage.observe(viewLifecycleOwner, {
             findNavController().navigate(
-                CapturingFragmentDirections.capturingToInfo(it.first, it.second)
+                CapturingFragmentDirections.capturingToInfo(it)
             )
         })
 
