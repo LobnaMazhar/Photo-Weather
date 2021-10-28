@@ -22,6 +22,7 @@ fun Bitmap.drawText(
         this.color = color
         this.textSize = textSize
         typeface = Typeface.SERIF
+        setShadowLayer(1f, 0f, 1f, Color.WHITE)
 
         val bounds = Rect()
         getTextBounds(text, 0, text.length, bounds)
