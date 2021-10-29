@@ -12,6 +12,7 @@ import com.google.android.gms.location.LocationServices
 import lobna.robusta.photoWeather.databinding.FragmentWeatherInfoBinding
 import lobna.robusta.photoWeather.utils.LocationHelper
 import lobna.robusta.photoWeather.utils.drawText
+import lobna.robusta.photoWeather.utils.spToPx
 import lobna.robusta.photoWeather.viewmodel.WeatherInfoViewModel
 
 /**
@@ -42,7 +43,7 @@ class WeatherInfoFragment : Fragment() {
         fragmentWeatherInfoBinding.wivm = weatherInfoViewModel
         weatherInfoViewModel.updateImageText.observe(this, {
             if (::bitmap.isInitialized) {
-                updateWeatherImage(bitmap.drawText(it))
+                updateWeatherImage(bitmap.drawText(it, 18f.spToPx(resources.displayMetrics)))
             }
         })
         return fragmentWeatherInfoBinding.root

@@ -1,6 +1,8 @@
 package lobna.robusta.photoWeather.utils
 
 import android.graphics.*
+import android.util.DisplayMetrics
+import android.util.TypedValue
 
 /**
  * Draw given text on top of a bitmap
@@ -11,7 +13,7 @@ import android.graphics.*
  * */
 fun Bitmap.drawText(
     text: String,
-    textSize: Float = 55f,
+    textSize: Float,
     color: Int = Color.BLACK
 ): Bitmap {
     val bitmap = copy(config, true)
@@ -43,3 +45,10 @@ fun Bitmap.rotateBitmap(degrees: Float): Bitmap {
     matrix.postRotate(degrees)
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }
+
+/**
+ * Changes given sp value to px
+ * */
+fun Float.spToPx(displayMetrics: DisplayMetrics): Float =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, displayMetrics)
+
