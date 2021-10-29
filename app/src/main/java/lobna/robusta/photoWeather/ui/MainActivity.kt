@@ -65,4 +65,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        navHostFragment?.childFragmentManager?.fragments?.get(0)?.apply {
+            if (this is PhotosFragment) {
+                if (ifPhotoOpened())
+                    closePhoto()
+                else super.onBackPressed()
+            } else super.onBackPressed()
+        }
+    }
 }

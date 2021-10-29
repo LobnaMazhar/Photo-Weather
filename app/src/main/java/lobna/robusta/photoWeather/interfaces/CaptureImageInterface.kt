@@ -1,6 +1,7 @@
 package lobna.robusta.photoWeather.interfaces
 
 import android.graphics.Bitmap
+import android.net.Uri
 
 /**
  * An interface used to notify capturing an image

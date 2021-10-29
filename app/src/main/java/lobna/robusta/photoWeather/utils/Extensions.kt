@@ -51,4 +51,3 @@ fun Bitmap.rotateBitmap(degrees: Float): Bitmap {
  * */
 fun Float.spToPx(displayMetrics: DisplayMetrics): Float =
     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, displayMetrics)
-

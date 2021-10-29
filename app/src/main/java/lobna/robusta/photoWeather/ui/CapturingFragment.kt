@@ -34,10 +34,12 @@ class CapturingFragment : Fragment() {
 
         cameraView = fragmentCapturingBinding.cameraView
 
-        capturingViewModel.capturedImage.observe(viewLifecycleOwner, {
-            findNavController().navigate(
-                CapturingFragmentDirections.capturingToInfo(it)
-            )
+        capturingViewModel.capturedImageBitmap.observe(viewLifecycleOwner, {
+            findNavController().navigate(CapturingFragmentDirections.capturingToInfo(it))
+        })
+
+        capturingViewModel.goToGallery.observe(viewLifecycleOwner, {
+            if (it) findNavController().navigate(CapturingFragmentDirections.capturingToGallery())
         })
 
         return fragmentCapturingBinding.root

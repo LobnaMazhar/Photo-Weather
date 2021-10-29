@@ -2,7 +2,6 @@ package lobna.robusta.photoWeather.viewmodel
 
 import android.graphics.Bitmap
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import lobna.robusta.photoWeather.interfaces.CaptureImageInterface
 import lobna.robusta.photoWeather.utils.CameraHelper
@@ -13,19 +12,21 @@ import lobna.robusta.photoWeather.utils.SingleLiveEvent
  *
  * @property captureImageInterface instance of [CaptureImageInterface] needed for the [CameraHelper] to notify image capturing event
  * @property cameraHelper has all the logic for initiating and using camera
- * @property capturedImage an Single LiveData
+ * @property capturedImageBitmap a Single LiveData to notify capturing image
+ * @property goToGallery a Single LiveData to notify navigation to gallery
  * */
 class CapturingViewModel : ViewModel() {
 
     private val captureImageInterface = object : CaptureImageInterface {
         override fun imageCaptured(bitmap: Bitmap) {
-            capturedImage.postValue(bitmap)
+            capturedImageBitmap.postValue(bitmap)
         }
     }
 
     val cameraHelper = CameraHelper(captureImageInterface)
 
-    val capturedImage = SingleLiveEvent<Bitmap>()
+    val capturedImageBitmap = SingleLiveEvent<Bitmap>()
+    val goToGallery = SingleLiveEvent<Boolean>()
 
     /**
      * method to ask [cameraHelper] to capture an image
@@ -33,5 +34,12 @@ class CapturingViewModel : ViewModel() {
      * */
     fun takePhoto(view: View) {
         cameraHelper.takePicture(view.context)
+    }
+
+    /**
+     * navigate to gallery fragment
+     * */
+    fun showGallery(view: View) {
+        goToGallery.postValue(true)
     }
 }

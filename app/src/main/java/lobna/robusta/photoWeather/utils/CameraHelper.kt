@@ -162,7 +162,8 @@ class CameraHelper(val captureImageInterface: CaptureImageInterface) {
                     super.onError(exception)
                     Log.e(TAG, "Failed to capture image", exception)
                 }
-            })
+            }
+        )
     }
 
     /**

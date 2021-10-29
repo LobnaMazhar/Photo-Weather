@@ -13,6 +13,9 @@
         <action
             android:id="@+id/capturingToInfo"
             app:destination="@id/weatherInfoFragment" />
+        <action
+            android:id="@+id/capturingToGallery"
+            app:destination="@id/photosFragment" />
     </fragment>
 
     <fragment
@@ -21,8 +24,12 @@
         android:label="fragment_weather_info"
         tools:layout="@layout/fragment_weather_info">
         <argument
-            android:name="weather_image"
+            android:name="weather_image_bitmap"
             app:argType="android.graphics.Bitmap" />
     </fragment>
-
+    <fragment
+        android:id="@+id/photosFragment"
+        android:name="lobna.robusta.photoWeather.ui.PhotosFragment"
+        android:label="fragment_photos"
+        tools:layout="@layout/fragment_photos" />
 </navigation>

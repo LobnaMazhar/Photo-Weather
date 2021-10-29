@@ -9,7 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import lobna.robusta.photoWeather.databinding.FragmentWeatherInfoBinding
+import lobna.robusta.photoWeather.model.ImageModel
+import lobna.robusta.photoWeather.repository.MainRepository
 import lobna.robusta.photoWeather.utils.LocationHelper
 import lobna.robusta.photoWeather.utils.drawText
 import lobna.robusta.photoWeather.utils.spToPx
@@ -43,7 +48,7 @@ class WeatherInfoFragment : Fragment() {
         fragmentWeatherInfoBinding.wivm = weatherInfoViewModel
         weatherInfoViewModel.updateImageText.observe(this, {
             if (::bitmap.isInitialized) {
-                updateWeatherImage(bitmap.drawText(it, 18f.spToPx(resources.displayMetrics)))
+                updateWeatherImage(bitmap.drawText(it, 18f.spToPx(resources.displayMetrics)), true)
             }
         })
         return fragmentWeatherInfoBinding.root
@@ -55,20 +60,34 @@ class WeatherInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (::fragmentWeatherInfoBinding.isInitialized)
-            updateWeatherImage(args.weatherImage)
-
+            updateWeatherImage(args.weatherImageBitmap)
         startLocation()
     }
 
     /**
      * Changes weather image view bitmap
      * */
-    private fun updateWeatherImage(bitmap: Bitmap) {
+    private fun updateWeatherImage(bitmap: Bitmap, saveImage: Boolean = false) {
         this.bitmap = bitmap
         fragmentWeatherInfoBinding.weatherImageView.apply {
             setImageBitmap(bitmap)
         }
         weatherInfoViewModel.setPhotoBitmap(bitmap)
+
+        if (saveImage) {
+            saveImage(bitmap)
+        }
+    }
+
+    /**
+     * Save image to database
+     *
+     * @param bitmap image's bitmap to save
+     * */
+    private fun saveImage(bitmap: Bitmap) {
+        CoroutineScope(Dispatchers.IO).launch {
+            MainRepository.insertImage(requireContext(), ImageModel((bitmap)))
+        }
     }
 
     /**
